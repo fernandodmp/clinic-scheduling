@@ -1,7 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Person } from './person.entity';
+import { Person, Doctor } from './person.entity';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { personFactory } from './person.factory';
+import { Appointment } from 'src/appointments/appointment.entity';
+import { GetScheduleDto } from './dtos/get-schedule.dto';
 
 @EntityRepository(Person)
 export class PeopleRepository extends Repository<Person> {
@@ -15,5 +17,24 @@ export class PeopleRepository extends Repository<Person> {
     await person.save();
 
     return person;
+  }
+
+  async getSchedule(id: number): Promise<GetScheduleDto> {
+    const person = await this.findOne(id, {
+      relations: [
+        'appointments',
+        'appointmentsAsDoctor',
+        'appointments.doctor',
+        'appointmentsAsDoctor.patient',
+      ],
+    });
+    const schedule = new GetScheduleDto();
+    schedule.appointments = person.appointments;
+
+    if (person instanceof Doctor) {
+      schedule.appointmentsAsDoctor = person.appointmentsAsDoctor;
+    }
+
+    return schedule;
   }
 }

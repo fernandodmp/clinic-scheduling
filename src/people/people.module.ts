@@ -8,5 +8,6 @@ import { PeopleRepository } from './people.repository';
   imports: [TypeOrmModule.forFeature([PeopleRepository])],
   providers: [PeopleService],
   controllers: [PeopleController],
+  exports: [PeopleService],
 })
 export class PeopleModule {}

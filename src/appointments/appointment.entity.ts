@@ -19,12 +19,14 @@ export class Appointment extends BaseEntity {
   @ManyToOne(
     type => Person,
     patient => patient.appointments,
+    { onDelete: 'CASCADE' },
   )
   patient: Person;
 
   @ManyToOne(
     type => Doctor,
     doctor => doctor.appointmentsAsDoctor,
+    { onDelete: 'CASCADE' },
   )
   doctor: Doctor;
 }

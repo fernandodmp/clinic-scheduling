@@ -23,12 +23,15 @@ export class Person extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ select: false })
   cpf: string;
 
   @OneToMany(
     type => Appointment,
     appointment => appointment.patient,
+    {
+      cascade: true,
+    },
   )
   appointments: Appointment[];
 }
@@ -38,6 +41,7 @@ export class Doctor extends Person {
   @OneToMany(
     type => Appointment,
     appointment => appointment.doctor,
+    { cascade: true },
   )
   appointmentsAsDoctor: Appointment[];
 }
